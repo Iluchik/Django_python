@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+	{% include "navigation.html" %}
+	<form action="/user/registration" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		{{ profile_form.as_p }}
+		<button type="submit" class="btn">Зарегистрироваться</button>
+		<button type="reset" class="btn">Сброс</button>
+	</form>
+</div>
+{% endblock %}

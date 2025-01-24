@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load auth_extras %}
+
+{% block content %}
+<div class="container">
+	{% include "navigation.html" %}
+	<h1>Список занятий</h1>
+	<div class="row">
+		<div class="col-md-2">
+			<h2>Категории</h2>
+			{% for item in categories %}
+				<a href="/" class="btn btn-primary">{{ item.name }}</a>
+			{% endfor %}
+		</div>
+		<div class="col-md-10">
+			{% if user.is_authenticated %}
+				<h2>{{ user.profile.group }}</h2>
+				{% for item in lessons %}
+					{% if user.profile.group == "X8X-111XX-24" %}
+						<div class="card mb-3" style="max-width: 100%;">
+							<a href="#" style="text-decoration: none; color: #000;">
+								<div class="row g-0">
+									<div class="col-md-8">
+										<div class="card-body">
+											<h5 class="card-title">{{ item.group }}</h5>
+											<h5 class="card-title">{{ item.date }} {{ item.title }} {{ item.category }}</h5>
+											<p class="card-text">
+												<small class="text-body-secondary">{{ item.start_time }} – {{item.get_end_time}}</small> / <small class="text-body-secondary">{{ item.classroom }}</small>
+											</p>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					{% else %}
+						{% if item.group == user.profile.group %}
+							<div class="card mb-3" style="max-width: 100%;">
+								{% if request.user|has_group:"students" %}
+									<a href="#" style="text-decoration: none; color: #000;"></a>
+								{% else %}
+									<a href="#" style="text-decoration: none; color: #000;"></a>
+								{% endif %}
+								<div class="row g-0">
+									<div class="col-md-8">
+										<div class="card-body">
+											<h5 class="card-title">{{ item.date }} {{ item.title }} {{ item.category }}</h5>
+											<p class="card-text">
+												<small class="text-body-secondary">{{ item.start_time }} – {{item.get_end_time}}</small> / <small class="text-body-secondary">{{ item.classroom }}</small>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				<h2>Занятия</h2>
+				{% for item in lessons %}
+					<div class="card mb-3" style="max-width: 100%;">
+						<div class="row g-0">
+							<div class="col-md-8">
+								<div class="card-body">
+									<h5 class="card-title">{{ item.group }}</h5>
+									<h5 class="card-title">{{ item.date }} {{ item.title }} {{ item.category }}</h5>
+									<p class="card-text">
+										<small class="text-body-secondary">{{ item.start_time }} – {{item.get_end_time}}</small> / <small class="text-body-secondary">{{ item.classroom }}</small>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
