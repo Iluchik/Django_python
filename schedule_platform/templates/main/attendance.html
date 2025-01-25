@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load auth_extras %}
+
+{% block content %}
+<div class="container">
+	{% include "navigation.html" %}
+	<h1>{{ lesson }}</h1>
+	{% if request.user|has_group:"teachers" %}
+	<h2>Код подтверждения: {{ lesson.verification_code }}</h2>
+	<h3>Подтвержденные пользователи:</h3>
+	<div>
+		{% for item in verified_users %}
+			<p>{{ item.username }}</p>
+		{% endfor %}
+	</div>
+	{% else %}
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Подтвердить посещение</button>
+		<button type="reset">Сброс</button>
+	</form>
+	{% endif %}
+</div>
+{% endblock %}
